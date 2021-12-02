@@ -1,5 +1,3 @@
-use std::io::{stdin, BufRead, BufReader};
-
 enum Movement {
     Horizontal(u16),
     Vertical(i16),
@@ -19,16 +17,10 @@ fn parse_movement(line: &str) -> Movement {
     }
 }
 
-fn main() {
-    let reader = BufReader::new(stdin());
-
+fn task1(movement: Vec<Movement>) {
     let mut pos = (0, 0);
 
-    for movement in reader
-        .lines()
-        .map(Result::unwrap)
-        .map(|line| parse_movement(&line))
-    {
+    for movement in movement {
         match movement {
             Movement::Horizontal(a) => pos.0 += a as i32,
             Movement::Vertical(a) => pos.1 += a as i32,
@@ -36,4 +28,28 @@ fn main() {
     }
 
     println!("{}", pos.0 * pos.1);
+}
+
+fn task2(movement: Vec<Movement>) {
+    let mut pos = (0, 0);
+    let mut aim = 0;
+
+    for movement in movement {
+        match movement {
+            Movement::Horizontal(a) => {
+                pos.0 += a as i32;
+                pos.1 += a as i32 * aim;
+            }
+            Movement::Vertical(a) => aim += a as i32,
+        }
+    }
+
+    println!("{}", pos.0 * pos.1);
+}
+
+fn main() {
+    aoclib::AocTask::read_lines(parse_movement)
+        .task1(task1)
+        .task2(task2)
+        .run();
 }
