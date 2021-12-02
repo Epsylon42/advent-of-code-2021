@@ -1,16 +1,11 @@
 #![feature(array_windows)]
 
-fn task1(values: Vec<u16>) {
-    let increased_count = values
-        .array_windows::<2>()
-        .filter(|[a, b]| b > a)
-        .count();
-
-    println!("{increased_count}");
+fn task1(values: Vec<u16>) -> usize {
+    values.array_windows::<2>().filter(|[a, b]| b > a).count()
 }
 
-fn task2(values: Vec<u16>) {
-    let increased_count = values
+fn task2(values: Vec<u16>) -> usize {
+    values
         .windows(4)
         .filter(|win| {
             let a: u16 = win[0..3].iter().sum();
@@ -18,14 +13,12 @@ fn task2(values: Vec<u16>) {
 
             b > a
         })
-        .count();
-
-    println!("{increased_count}");
+        .count()
 }
 
 fn main() {
     aoclib::AocTask::read_lines(|line| line.parse::<u16>().unwrap())
         .task1(task1)
         .task2(task2)
-        .run();
+        .run_display();
 }

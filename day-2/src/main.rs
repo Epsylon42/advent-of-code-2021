@@ -17,7 +17,7 @@ fn parse_movement(line: &str) -> Movement {
     }
 }
 
-fn task1(movement: Vec<Movement>) {
+fn task1(movement: Vec<Movement>) -> i32 {
     let mut pos = (0, 0);
 
     for movement in movement {
@@ -27,10 +27,10 @@ fn task1(movement: Vec<Movement>) {
         }
     }
 
-    println!("{}", pos.0 * pos.1);
+    pos.0 * pos.1
 }
 
-fn task2(movement: Vec<Movement>) {
+fn task2(movement: Vec<Movement>) -> i32 {
     let mut pos = (0, 0);
     let mut aim = 0;
 
@@ -44,12 +44,12 @@ fn task2(movement: Vec<Movement>) {
         }
     }
 
-    println!("{}", pos.0 * pos.1);
+    pos.0 * pos.1
 }
 
 fn main() {
     aoclib::AocTask::read_lines(parse_movement)
         .task1(task1)
         .task2(task2)
-        .run();
+        .run_display();
 }
