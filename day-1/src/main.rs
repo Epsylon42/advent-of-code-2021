@@ -1,27 +1,24 @@
-fn task1(values: Vec<u16>) {
-    let increased_count: usize = values
-        .windows(2)
-        .map(|win| {
-            let a = win[0];
-            let b = win[1];
+#![feature(array_windows)]
 
-            if b > a { 1 } else { 0 }
-        })
-        .sum();
+fn task1(values: Vec<u16>) {
+    let increased_count = values
+        .array_windows::<2>()
+        .filter(|[a, b]| b > a)
+        .count();
 
     println!("{increased_count}");
 }
 
 fn task2(values: Vec<u16>) {
-    let increased_count: usize = values
+    let increased_count = values
         .windows(4)
-        .map(|win| {
+        .filter(|win| {
             let a: u16 = win[0..3].iter().sum();
             let b: u16 = win[1..4].iter().sum();
 
-            if b > a { 1 } else { 0 }
+            b > a
         })
-        .sum();
+        .count();
 
     println!("{increased_count}");
 }
