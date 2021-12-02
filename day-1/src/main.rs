@@ -1,14 +1,13 @@
 fn task1(values: Vec<u16>) {
-    let mut increased_count = 0;
-    let mut prev_height = None;
-    for height in values {
-        match prev_height {
-            Some(prev_height) if prev_height < height => increased_count += 1,
-            _ => {}
-        }
+    let increased_count: usize = values
+        .windows(2)
+        .map(|win| {
+            let a = win[0];
+            let b = win[1];
 
-        prev_height = Some(height);
-    }
+            if b > a { 1 } else { 0 }
+        })
+        .sum();
 
     println!("{increased_count}");
 }
