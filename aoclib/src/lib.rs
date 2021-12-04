@@ -1,6 +1,6 @@
 use std::env;
 use std::fmt::Display;
-use std::io::{stdin, BufRead, BufReader};
+use std::io::{stdin, Read, BufRead, BufReader};
 use std::process::exit;
 
 #[must_use = "This value does nothing unless you call .run() or .run_display()"]
@@ -18,6 +18,20 @@ fn not_implemented_1<T>(_: T) -> ! {
 fn not_implemented_2<T>(_: T) -> ! {
     eprintln!("Task 2 is not implemented");
     exit(1);
+}
+
+impl<I> AocTask<I, fn(I) -> !, fn(I) -> !>
+{
+    pub fn read_full(mut reader: impl FnMut(&str) -> I) -> Self {
+        let mut input = String::new();
+        stdin().read_to_string(&mut input).unwrap();
+
+        AocTask {
+            input: reader(&input),
+            f1: not_implemented_1,
+            f2: not_implemented_2,
+        }
+    }
 }
 
 impl<I> AocTask<Vec<I>, fn(Vec<I>) -> !, fn(Vec<I>) -> !>
