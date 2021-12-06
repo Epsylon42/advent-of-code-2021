@@ -3,19 +3,7 @@ const RESET_TIMER: usize = 6;
 
 type Timers = [u64; MAX_TIMER + 1];
 
-fn task(in_timers: Vec<u8>, steps: usize) -> u64 {
-    let mut timers = Timers::default();
-
-    for timer in in_timers {
-        timers[timer as usize] += 1;
-    }
-
-    run_simulation(&mut timers, steps);
-
-    timers.into_iter().sum()
-}
-
-fn run_simulation(timers: &mut Timers, steps: usize) {
+fn task(mut timers: Timers, steps: usize) -> u64 {
     for _ in 0..steps {
         let zero_timers = timers[0];
 
@@ -24,14 +12,18 @@ fn run_simulation(timers: &mut Timers, steps: usize) {
         timers[RESET_TIMER] += zero_timers;
         timers[MAX_TIMER] = zero_timers;
     }
+
+    timers.into_iter().sum()
 }
 
 fn main() {
     aoclib::AocTask::read_full(|s| {
-        s.trim()
-            .split(',')
-            .map(|s| s.parse::<u8>().unwrap())
-            .collect::<Vec<u8>>()
+        let mut timers = Timers::default();
+        for s in s.trim().split(',') {
+            timers[s.parse::<usize>().unwrap()] += 1;
+        }
+
+        timers
     })
     .task1(|input| task(input, 80))
     .task2(|input| task(input, 256))
