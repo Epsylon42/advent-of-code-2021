@@ -5,7 +5,7 @@ use std::process::exit;
 
 #[must_use = "This value does nothing unless you call .run() or .run_display()"]
 pub struct AocTask<I, F1, F2> {
-    input: I,
+    pub input: I,
     f1: F1,
     f2: F2,
 }
