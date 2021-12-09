@@ -1,9 +1,13 @@
+#![feature(test)]
+extern crate test;
+
 use std::env;
 use std::fmt::Display;
 use std::io::{stdin, Read, BufRead, BufReader};
 use std::process::exit;
 
 #[must_use = "This value does nothing unless you call .run() or .run_display()"]
+#[derive(Clone)]
 pub struct AocTask<I, F1, F2> {
     pub input: I,
     f1: F1,
@@ -89,16 +93,12 @@ where
             }
         }
     }
-}
 
-impl<I, F1, F2, R1, R2> AocTask<I, F1, F2>
-where
-    F1: FnOnce(I) -> R1,
-    F2: FnOnce(I) -> R2,
-    R1: Display,
-    R2: Display,
-{
-    pub fn run_display(self) {
+    pub fn run_display(self)
+    where
+        R1: Display,
+        R2: Display,
+    {
         match env::args().nth(1) {
             Some(s) if s == "1" => println!("{}", (self.f1)(self.input)),
             Some(s) if s == "2" => println!("{}", (self.f2)(self.input)),
@@ -111,5 +111,23 @@ where
                 exit(1);
             }
         }
+    }
+
+    pub fn bench1(self, t: &mut test::Bencher)
+    where 
+        I: Clone,
+        F1: Clone,
+    {
+        let Self { input, f1, .. } = self;
+        t.iter(|| (f1.clone())(input.clone()));
+    }
+
+    pub fn bench2(self, t: &mut test::Bencher)
+    where 
+        I: Clone,
+        F2: Clone,
+    {
+        let Self { input, f2, .. } = self;
+        t.iter(|| (f2.clone())(input.clone()));
     }
 }
