@@ -1,6 +1,5 @@
 struct EnergyMap {
     map: Vec<u8>,
-    has_flashed: Vec<bool>,
     num_flashes: usize,
     width: usize,
 }
@@ -15,7 +14,6 @@ impl EnergyMap {
     fn new(width: usize, height: usize) -> Self {
         EnergyMap {
             map: vec![0; width * height],
-            has_flashed: vec![false; width * height],
             num_flashes: 0,
             width,
         }
@@ -55,11 +53,8 @@ impl EnergyMap {
         }
 
         let mut result = StepResult::AllFlashed;
-        for (value, has_flashed) in self.map.iter_mut().zip(self.has_flashed.iter_mut()) {
-            if *has_flashed {
-                *value = 0;
-                *has_flashed = false;
-            } else {
+        for value in &mut self.map {
+            if *value != 0 {
                 result = StepResult::NotAllFlashed
             }
         }
@@ -68,15 +63,17 @@ impl EnergyMap {
     }
 
     fn flash(&mut self, flat_coord: usize) {
-        if self.has_flashed[flat_coord] {
+        if self.map[flat_coord] == 0 {
             return;
         }
 
-        self.has_flashed[flat_coord] = true;
+        self.map[flat_coord] = 0;
         self.num_flashes += 1;
         for neighbor_coord in self.neighbors_of(self.unflatten_coord(flat_coord)) {
             let flat_neighbor_coord = self.flatten_coord(neighbor_coord);
-            self.map[flat_neighbor_coord] += 1;
+            if self.map[flat_neighbor_coord] != 0 {
+                self.map[flat_neighbor_coord] += 1;
+            }
             if self.map[flat_neighbor_coord] > 9 {
                 self.flash(flat_neighbor_coord);
             }
