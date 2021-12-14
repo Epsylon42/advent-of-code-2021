@@ -190,11 +190,7 @@ fn task2(tasks: Vec<Task>) -> usize {
 
 fn main() {
     aoclib::AocTask::read_lines(|line| {
-        let mut iter = line.split(" | ");
-
-        let patterns = iter.next().unwrap();
-        let output = iter.next().unwrap();
-        assert_eq!(iter.next(), None);
+        let (patterns, output) = aoclib::split_into_two(line, " | ");
 
         let patterns = patterns
             .split_ascii_whitespace()

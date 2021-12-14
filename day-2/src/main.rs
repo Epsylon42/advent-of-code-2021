@@ -4,10 +4,7 @@ enum Movement {
 }
 
 fn parse_movement(line: &str) -> Movement {
-    let mut split = line.split_ascii_whitespace();
-    let word = split.next().unwrap();
-    let value = split.next().unwrap();
-    assert_eq!(split.next(), None);
+    let (word, value) = aoclib::split_into_two(line, " ");
 
     match word {
         "forward" => Movement::Horizontal(value.parse().unwrap()),

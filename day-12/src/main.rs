@@ -109,11 +109,7 @@ fn main() {
         }
 
         for connection in input.trim().split('\n') {
-            let mut iter = connection.split('-');
-            let a = iter.next().unwrap();
-            let b = iter.next().unwrap();
-            assert_eq!(iter.next(), None);
-
+            let (a, b) = aoclib::split_into_two(connection, "-");
             graph.add_edge(nodes[a], nodes[b], 0);
         }
 

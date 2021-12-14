@@ -4,11 +4,7 @@ struct Line {
 }
 
 fn parse_line(s: &str) -> Line {
-    let mut iter = s.trim().split(" -> ");
-    let fst = iter.next().unwrap();
-    let snd = iter.next().unwrap();
-    assert_eq!(iter.next(), None);
-
+    let (fst, snd) = aoclib::split_into_two(s, " -> ");
     Line {
         start: parse_pair(fst),
         end: parse_pair(snd),
@@ -16,11 +12,7 @@ fn parse_line(s: &str) -> Line {
 }
 
 fn parse_pair(s: &str) -> (i16, i16) {
-    let mut iter = s.split(',');
-    let fst = iter.next().unwrap();
-    let snd = iter.next().unwrap();
-    assert_eq!(iter.next(), None);
-
+    let (fst, snd) = aoclib::split_into_two(s, ",");
     (fst.parse().unwrap(), snd.parse().unwrap())
 }
 
