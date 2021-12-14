@@ -31,7 +31,7 @@ impl<I> AocTask<I, fn(I) -> !, fn(I) -> !>
         stdin().read_to_string(&mut input).unwrap();
 
         AocTask {
-            input: reader(&input),
+            input: reader(input.trim()),
             f1: not_implemented_1,
             f2: not_implemented_2,
         }
@@ -44,7 +44,7 @@ impl<I> AocTask<Vec<I>, fn(Vec<I>) -> !, fn(Vec<I>) -> !>
         let input = BufReader::new(stdin())
             .lines()
             .map(Result::unwrap)
-            .map(|line| reader(&line))
+            .map(|line| reader(line.trim()))
             .collect();
 
         AocTask {
@@ -130,4 +130,12 @@ where
         let Self { input, f2, .. } = self;
         t.iter(|| (f2.clone())(input.clone()));
     }
+}
+
+pub fn split_into_two<'a>(input: &'a str, separator: &str) -> (&'a str, &'a str) {
+    let separator_pos = input.find(separator).unwrap();
+    (
+        &input[..separator_pos],
+        &input[separator_pos + separator.len() ..]
+    )
 }
